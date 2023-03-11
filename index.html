@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+ @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;500;800&display=swap');
+body {
+	font-family: 'Inter', Helvetica, Sans-Serif;
+}
+.home {
+	text-align: center;
+    padding-top: 90px;
+    display: hidden
+}
+.debug {
+	text-align: center;
+    padding-top: 90px;
+}
+input {
+	font-family: 'Inter', Helvetica, Sans-Serif;
+    background-color: rgb(233,233,233);
+}
+button {
+	font-family: 'Inter', Helvetica, Sans-Serif;
+}
+</style>
+</head>
+<body>
+
+<div class="debug" id="debug">
+<button style="border: none; background-color: white;" onclick="w2c_cmd()" disabled><img src="https://sam-r-alt.000webhostapp.com/load.gif"style="width: 20px; height: 20px;" id="load"></button>
+</div>
+
+<div class="home" id="home">
+<b title="v1.0.0/beta">w2c engine:</b> <a href="#">help</a><br><br>
+<l>Add your <b title="*.html, *.js and *.css only">files</b> in the input box below.</l><br>
+<form name="w2c">
+<input type="file" accept=".html,.js,.css" multiple id="w2c_files_details">
+</form><br><br>
+<button onclick="w2c_gen_files()">generate</button> <button onclick="w2cdiag()">diagnose</button>
+</div>
+<script>
+console.log("w2c engine, v1.0")
+var docURL = window.location.href,
+  params = [];     
+docURL = docURL.replace(window.location.origin, '');
+
+if (docURL.indexOf('/#/') > -1) {
+  docURL = docURL.split('/#/')[1];
+  if (docURL != '') {
+
+    if (docURL[docURL.length - 1] == '/') {
+      docURL = docURL.substring(0, docURL.length - 1);
+    } else {
+    document.getElementById('load').src = "https://sam-r-alt.000webhostapp.com/warn.png";
+    document.getElementById('load').style = "width: 30px; height: 30px;";
+    console.error('✗ requested file not found (' + cmds.substring(0,cmds.length -1) + '.html)')
+console.log('the usual solution would be to state your files name at the end of your w2c url, e.g .../c2FtLXIudzNzcGFjZXMx#w2c.html.')
+console.log('https://w2c-engine.github.io')
+    }
+    w2c_onload()
+function w2c_onload() {
+var temp = details.split(/\r?\n/);
+var bool1 = false;
+var bool2 = false;
+temp.forEach(function(val) {
+if (bool1 == true) {
+// nil
+} else {
+if (val == '#' + cmds) {
+w2c_load_doc(val)
+bool2 = true;
+return;
+} else {
+if (bool2 == true) {
+// nil
+} else {
+document.getElementById('load').src = 'https://sam-r-alt.000webhostapp.com/warn.png'
+console.error('✗ requested file not found (' + cmds.substring(0,cmds.length -1) + '.html)')
+console.log('the usual solution would be to state your files name at the end of your w2c url, e.g .../c2FtLXIudzNzcGFjZXMx#w2c.html.')
+console.log('https://w2c-engine.github.io')
+bool1 = true;
+}}}})
+}
+
+function w2c_load_doc(a) {
+var bool1 = false;
+var bool2 = false;
+var temp = details.split(/\r?\n/)
+temp.forEach(function(line) {
+if (bool2 == true) {
+w2c_load_body(line)
+}
+if (bool1 == true) {
+// is end of head
+if (line == '%b') {
+bool2 = true
+bool1 = false
+} else {
+w2c_load_head(line)
+}}
+if (line == '%h') {
+bool1 = true;
+}})
+}
+
+function w2c_cmd_add(a, b) {
+w2c_dict.push({
+key: "$" + a,
+value: b
+});
+}
+
+function w2c_atb_add(a, b) {
+w2c_atb_dict.push({
+key: a,
+value: b
+});
+}
+
+function w2c_load_head(a) {
+if (a.startsWith('$1')) {
+a = a.substring(3,a.lastIndexOf('<'))
+var a_1 = document.createElement('title')
+a_1.innerHTML = a
+document.head.appendChild(a_1)
+return;
+}
+if (a.startsWith('$2')) {
+a = a.substring(3,a.lastIndexOf('<'))
+var a_1 = document.createElement('style')
+a_1.innerHTML = a
+document.head.appendChild(a_1)
+return;
+}
+
+var w2c_atb_1 = ''
+var w2c_atb_2 = ''
+}
+function w2c_load_body(a) {
+document.getElementById('load').style = 'display: none'
+document.getElementById('debug').style = 'display: none'
+if (a.startsWith('$3(')) {
+w2c_split_atb(a.substring(3,a.length))
+var indx = a.indexOf(')>')
+a = a.substring(indx + 2,a.length)
+a = a.substring(0,a.lastIndexOf('<'))
+var a_1 = document.createElement('h2')
+a_1.innerHTML = a
+a_1.setAttribute(w2c_atb_1, w2c_atb_2)
+document.body.appendChild(a_1)
+}
+if (a.startsWith('$3')) {
+a = a.substring(3,a.lastIndexOf('<'))
+var a_1 = document.createElement('h2')
+a_1.innerHTML = a
+document.body.appendChild(a_1)
+}
+
+if (a.startsWith('$2(')) {
+w2c_split_atb(a.substring(3,a.length))
+var indx = a.indexOf(')>')
+a = a.substring(indx + 2,a.length)
+a = a.substring(0,a.lastIndexOf('<'))
+var a_1 = document.createElement('h1')
+a_1.innerHTML = a
+a_1.setAttribute(w2c_atb_1, w2c_atb_2)
+document.body.appendChild(a_1)
+}
+if (a.startsWith('$2')) {
+a = a.substring(3,a.lastIndexOf('<'))
+var a_1 = document.createElement('h1')
+a_1.innerHTML = a
+document.body.appendChild(a_1)
+}
+
+if (a.startsWith('$1(')) {
+w2c_split_atb(a.substring(3,a.length))
+var indx = a.indexOf(')>')
+a = a.substring(indx + 2,a.length)
+a = a.substring(0,a.lastIndexOf('<'))
+var a_1 = document.createElement('p')
+a_1.innerHTML = a
+a_1.setAttribute(w2c_atb_1, w2c_atb_2)
+document.body.appendChild(a_1)
+}
+if (a.startsWith('$1')) {
+a = a.substring(3,a.lastIndexOf('<'))
+var a_1 = document.createElement('p')
+a_1.innerHTML = a
+document.body.appendChild(a_1)
+}}
+
+
+function w2c_split_atb(a) {
+var temp = a
+temp = temp.split('')
+var word_1 = ''
+var indx = 0
+temp.forEach(function(chr) {
+if (chr == '=') {
+w2c_atb_1 = word_1.substring(1,word_1.length)
+a = a.substring(word_1.length + 2, a.indexOf('")>'))
+w2c_atb_2 = a
+return;
+} else {
+indx = indx + 1
+word_1 = word_1.slice(0, word_1.length) + chr
+}})
+}
+  }
+} else {
+document.getElementById("debug").style = "display: none;";
+    document.getElementById("home").style = "display: block;";
+    }
+    
+    function w2c_gen_files() {
+    var details = "<html>\n<head>\n<title>w2c</title>\n<style>.h1-class { font-weight: bold; }</style>\n</head>\n<body>\n<h2 style=\"color: purple;\">h</h2>\n<p style=\"font-weight: bold;\">Hello world!</p>\n</body>\n</html>";
+   
+    var text = details.split(/\r?\n/);
+    var headData = '';
+    var bodyData = '';
+    // head bool
+    var bool1 = false;
+    var bool2 = false;
+    var bool3 = false;
+    var bool4 = false;
+    
+    text.forEach(function(val) {
+    val = val.slice(0, val.length) + '\n' + val.slice(val.length);
+    // eob, return
+    if (bool3 == true) {
+    var out = '#w2c.html\n%h\n';
+    // refine
+    bodyData = bodyData.replace('undefined', '');
+    headData = headData.replace(',', '')
+    bodyData = bodyData.replace(',', '')
+    bodyData = bodyData.replace('0', '')
+    bodyData = bodyData.replaceAll('\n', '')
+    out = out.slice(0, out.length) + headData + '%b' + bodyData;
+    // download
+const link = document.createElement("a");
+const file = new Blob([out], { type: 'text/plain' });
+link.href = URL.createObjectURL(file);
+var name = btoa('w2c_files:');
+name = name.slice(0, name.indexOf('='));
+link.download = name;
+link.click();
+URL.revokeObjectURL(link.href);
+console.log('✓ generating file complete');
+    
+    }
+    // eoh, body bool true
+    if (bool2 == true) {
+    // if reached end of body
+    if (val == '</body>\n') {
+    bool3 = true;
+    bool2 = false;
+    } else {
+    var temp2 = val.split(/\r?\n/);
+    temp2.forEach(function(val3) {
+    bodyData = bodyData.split(0, bodyData.length) + w2c_is_body(val3);
+    })}}
+    // head declaration
+    if (bool1 == true) {
+    // if reached end of head
+    if (val == '</head>\n') {
+    bool2 = true;
+    bool1 = false;
+    } else {
+    var temp = val.split(/\r?\n/);
+    temp.forEach(function(val2) {
+    headData = headData.split(0, headData.length) + w2c_is_head(val2);
+    })}}
+    // head bool true
+    if (val == '<head>\n') {
+    bool1 = true;
+    }
+    })}
+    
+    function w2c_is_head(a) {
+    // avoid undefined
+    if (a.length == 0) {
+    return(0);
+    }
+    if (a.charAt(2) == 'i' && a.charAt(3) == 't') {
+    a = a.replace('<title>', '');
+    a = a.replace('</title>', '');
+    var out = '$1>';
+    out = out.split(0,out.length) + a + '<\n';
+    return(out);
+    } else if (a.charAt(2) == 't' && a.charAt(3) == 'y') {
+    a = a.replace('<style>', '');
+    a = a.replace('</style>', '');
+    var out = '$2>';
+    out = out.split(0,out.length) + a + '<\n';
+    return(out);
+    }}
+    
+    function w2c_is_body(a) {
+    // avoid undefined
+    if (a.length == 0) {
+    return(0);
+    }
+    if (a.charAt(1) == 'p') {
+    if (a.charAt(2) == ' ') {
+    var atb = a.substring(2,a.indexOf('>'));
+    var indx = a.indexOf('>');
+    a = a.substring(2,-indx) + a.substring(indx)
+    // *
+    a = a.replace('<p>', '');
+    a = a.replace('</p>', '');
+    var out = '$1(';
+    out = out.split(0,out.length) + atb + ')>' + a + '<\n';
+    return(out);
+    } else {
+    a = a.replace('<p>', '');
+    a = a.replace('</p>', '');
+    var out = '$1>';
+    out = out.split(0,out.length) + a + '<\n';
+    return(out); }
+    } else if (a.charAt(1) == 'h') {
+    if (a.charAt(3) == ' ') {
+    var atb = a.substring(3,a.indexOf('>'));
+    var indx = a.indexOf('>');
+    a = a.substring(3,-indx) + a.substring(indx);
+    var num = a.charAt(2);
+    var ind = parseInt(num);
+    ind = ind + 1;
+    if (num < '7') {
+    a = a.replace('<h' + num + '>', '');
+    a = a.replace('</h' + num + '>', '');
+    var out = '$' + ind + '(';
+    out = out.split(0,out.length) + atb + ')>' + a + '<\n';
+    return(out);}
+    } else {
+    var num = a.charAt(2)
+    var ind = parseInt(num);
+    ind = ind + 1;
+    if (num < '7') {
+    a = a.replace('<h' + num + '>', '');
+    a = a.replace('</h' + num + '>', '');
+    var out = '$' + ind + '>';
+    out = out.split(0,out.length) + a + '<\n';
+    return(out);
+    }}
+    }}
+    
+    
+    // developer notes
+    // 1* - develop tables for attributes
+</script>
+</body>
+</html>
